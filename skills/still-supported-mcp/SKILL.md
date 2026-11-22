@@ -5,67 +5,77 @@ description: Inspect epistemic decision support, compute word-level evidence red
 
 # Still Supported MCP Skill (`still-supported-mcp`)
 
-Still Supported exposes a native Atlassian Forge MCP server (`rovo:mcp` module key: `still-supported-mcp`) running 100% inside Atlassian Cloud (`Runs on Atlassian`, zero external egress).
+Still Supported exposes a native Atlassian Forge MCP server (`rovo:mcp` module key: `still-supported-mcp`, app ID: `a02e8917-1f2e-4737-a4d5-5a858b729799`) running 100% inside Atlassian Cloud (`Runs on Atlassian`, zero external egress).
 
 ## Core Epistemic Safety Invariant ("AI Inspects, Humans Sign")
 
-All three MCP tools are **strictly read-only (`actionVerb: GET`)** and execute under the signed-in user's Jira and Teamwork Graph permissions:
+All three MCP tools are **strictly read-only (`actionVerb: GET`, 0 AI writes)** and execute under the signed-in user's Jira and Teamwork Graph permissions:
 1. **Zero silent Jira writes**: MCP tools never transition Jira status, overwrite descriptions, or post unapproved comments.
 2. **Zero AI sign-offs**: MCP tools never record or renew supplier quality dispositions (`D6-effectiveness`, `D8`) or customer acceptances. Only an authenticated human reviewer inside Jira can sign a disposition on `@current` evidence.
-3. **Deterministic cryptographic verification**: Every evidence version and audit summary includes deterministic UTF-8 SHA-256 digests and exact `@version` citations.
+3. **Deterministic cryptographic verification**: Every evidence version and audit summary includes deterministic UTF-8 SHA-256 digests, explicit `releaseGate` (`CLEAR` vs `BLOCKED`), and exact `@version` citations.
 
 ---
 
 ## Connecting from Claude Code, Cursor, or Rovo Studio
 
-### 1. Rovo Studio / Atlassian Cloud
-When Still Supported `2.0.0` is installed on your Jira Cloud site, both **`Still Supported Inspector`** (`rovo:agent`) and **`Still Supported MCP`** (`rovo:mcp`) are automatically registered in your Atlassian site's Rovo catalog.
+### 1. Rovo Studio / Atlassian Cloud (Zero-Config)
+When Still Supported `2.0.1` is installed on your Jira Cloud site, both **`Still Supported Inspector`** (`rovo:agent`) and **`Still Supported MCP`** (`rovo:mcp`) are automatically registered in your Atlassian site's Rovo catalog.
 
-### 2. Claude Code / Cursor (via Atlassian Remote MCP)
-Connect your MCP client to your Atlassian Cloud MCP endpoint with OAuth 2.1 user consent, enabling the `still-supported-mcp` toolset:
+### 2. Claude Code / Cursor (Streamable HTTP Forge MCP Endpoint)
+**Prerequisite**: Ensure your Atlassian Cloud site administrator has enabled Rovo MCP / Forge `rovo:mcp` tool exposure in **Atlassian Administration** (`Settings -> Rovo MCP server`). On first invocation, your MCP client completes standard Atlassian OAuth 2.1 user consent.
 
+#### Claude Code CLI (1-liner)
+```bash
+claude mcp add --transport http still-supported https://mcp.atlassian.com/forge/a02e8917-1f2e-4737-a4d5-5a858b729799
+```
+
+#### Standard `.mcp.json` / Cursor MCP Configuration
 ```json
 {
   "mcpServers": {
-    "atlassian-still-supported": {
-      "url": "https://mcp.atlassian.com/v1/sse",
-      "description": "Atlassian Remote MCP including Still Supported epistemic audit tools"
+    "still-supported": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/forge/a02e8917-1f2e-4737-a4d5-5a858b729799"
     }
   }
 }
 ```
 
+*(Optional)* To pair Still Supported's epistemic audit tools with Atlassian's first-party Jira/Confluence Rovo MCP tools in the same workspace, add `"atlassian-rovo": { "type": "http", "url": "https://mcp.atlassian.com/v2/mcp" }` alongside `"still-supported"`.
+
 ---
 
-## Available MCP Tools (3 `GET` Tools)
+## Available MCP Tools (3 Read-Only `GET` Tools)
 
 ### 1. `inspect-decision-support`
-Returns the complete epistemic support projection for a Jira work item.
+Returns the complete epistemic support and release-gate projection for a Jira work item.
 - **Input**:
-  - `issueKey` (`string`, required): Jira issue key, e.g. `"KAN-3"`.
+  - `issueKey` (`string`, optional in Rovo Jira issue context; pass explicitly in external MCP clients, e.g. `"KAN-3"`).
 - **Returns**:
-  - `status`: `"ALL_DECISIONS_SUPPORTED"` | `"DECISIONS_REQUIRE_REVIEW"` | `"UNINITIALIZED"` | `"CASE_ERASED"`
+  - `status`: `"ALL_DECISIONS_SUPPORTED"` | `"DECISIONS_REQUIRE_REVIEW"` | `"SUPPORT_WITHDRAWN_OR_REOPENED"` | `"UNINITIALIZED"` | `"CASE_ERASED"`
+  - `releaseGate`: `"CLEAR"` | `"BLOCKED"` (remains `"BLOCKED"` with explicit `blockingReasons[]` both when evidence advances past signed citations AND when a reviewer signs `withdraw-support` or `reopen-review`).
+  - `supplierToReviewCount` & `supplierWithdrawnOrReopenedCount`.
   - `decisions[]`: each supplier and customer decision with `review` (`"CURRENT"`, `"TO REVIEW"`, or `"CITES EARLIER VERSION"`), `basisComparison` (`citedVersion` vs `currentVersion`), `brokenPrerequisites` (e.g. `D6-effectiveness` breaking `D8`), and `currentDisposition`.
   - `changedEvidence[]`: multi-version records with SHA-256 digests and `quantitativeDrift` (`24 cartons -> 12 cartons (-50%)`).
-  - `handover`: `{ status: "CURRENT" | "STALE", snapshotRevision, currentRevision }`.
+  - `handover`: `{ status: "CURRENT" | "STALE" | "NOT_GENERATED", stale, snapshotRevision, currentRevision }`.
   - `auditDigestSha256`: canonical SHA-256 digest of the ISO 13485 / IATF 16949 / SOC 2 Audit Pack.
 
 ### 2. `diff-evidence-versions`
 Computes a deterministic word-level Longest Common Subsequence (LCS) redline diff and quantitative scope shift between the cited version and current version of an evidence record.
 - **Inputs**:
-  - `issueKey` (`string`, required): Jira issue key, e.g. `"KAN-3"`.
-  - `recordId` (`string`, required): Evidence record ID, e.g. `"SCAN-RUN"`.
+  - `issueKey` (`string`, e.g. `"KAN-3"`).
+  - `recordId` (`string`, optional — defaults to the latest amended record such as `"SCAN-RUN"`).
 - **Returns**:
   - `fromVersion`, `toVersion`, `before` & `after` bodies + `sha256` digests.
   - `inlineRedline`: compact inline redline (`[-removed-]{+added+}`) optimized for LLM token efficiency.
   - `quantitativeDrift`: `{ hasQuantitativeDrift, shiftCount, headline, shifts: [{ metric, before, after, delta, pctChange }] }` — cleanly separating editorial typo fixes (`0` numeric shifts) from quantitative scope contractions (`24 -> 12`, `-50%`).
 
 ### 3. `discover-teamwork-context`
-Queries Jira `issuelinks` and Atlassian Teamwork Graph (`api.asUser().requestTeamworkGraph`) around the work item.
+Queries Jira `issuelinks`, Jira `remotelink` Confluence SOP pages, and Atlassian Teamwork Graph (`api.asUser().requestTeamworkGraph` curated query `stillsupported_workItemContext`) around the work item.
 - **Input**:
-  - `issueKey` (`string`, required): Jira issue key, e.g. `"KAN-3"`.
+  - `issueKey` (`string`, e.g. `"KAN-3"`).
 - **Returns**:
-  - `teamworkGraph`: `{ status: "connected" | "fallback-jira-rest", queriedAri, graphObjectCount, jiraIssueLinkCount }`
+  - `teamworkGraph`: `{ status: "connected" | "connected-empty-fallback-rest" | "fallback-jira-rest", queriedAri, graphObjectCount, jiraIssueLinkCount, confluenceRemoteLinkCount }`
   - `jiraIssues[]` (indicating `boundRecordId` when already tracked as versioned evidence), `confluencePages[]`, and `atlassianGoals[]`.
 
 ---
@@ -75,10 +85,11 @@ Queries Jira `issuelinks` and Atlassian Teamwork Graph (`api.asUser().requestTea
 When a user asks *"Is KAN-3 still safe to ship / close?"* or *"What changed after closure on KAN-3?"*:
 
 1. Call **`inspect-decision-support`** with `{ "issueKey": "KAN-3" }`.
-2. If `supplierToReviewCount > 0` or `changedEvidence.length > 0`, call **`diff-evidence-versions`** for each changed `recordId` (e.g. `"SCAN-RUN"`).
-3. Call **`discover-teamwork-context`** with `{ "issueKey": "KAN-3" }` to check linked laboratory Jira tickets, SOP Confluence pages, and quality Goals.
-4. Report clearly:
-   - Which supplier decisions are `CURRENT` vs `TO REVIEW` (and whether `D8` is blocked by a broken `D6-effectiveness` prerequisite).
+2. Check `releaseGate` (`"CLEAR"` vs `"BLOCKED"`), `status` (`"DECISIONS_REQUIRE_REVIEW"` vs `"SUPPORT_WITHDRAWN_OR_REOPENED"` vs `"ALL_DECISIONS_SUPPORTED"`), and `blockingReasons`.
+3. If `changedEvidence.length > 0`, call **`diff-evidence-versions`** for each changed `recordId` (e.g. `"SCAN-RUN"`).
+4. Call **`discover-teamwork-context`** with `{ "issueKey": "KAN-3" }` to check linked laboratory Jira tickets, SOP Confluence pages, and quality Goals.
+5. Report clearly:
+   - Whether `releaseGate` is `CLEAR` or `BLOCKED` (distinguishing unreviewed `TO REVIEW` decisions from explicitly signed `WITHDRAWN / REOPENED` dispositions).
    - Whether historical customer acceptance (`CITES EARLIER VERSION`) predates the latest evidence.
    - Exact quantitative shifts (`24 cartons -> 12 cartons (-50%)`) vs editorial-only revisions (`0` numeric shifts) and SHA-256 digests.
-   - Remind the human reviewer to open the **Still Supported** cockpit in Jira (`Examine & Sign` tab) to record their signed disposition.
+   - Remind the human reviewer to open the **Still Supported** cockpit in Jira (`Examine & Sign` tab) when a human disposition is needed.

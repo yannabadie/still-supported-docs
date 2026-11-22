@@ -20,7 +20,7 @@ Teams face a dangerous blind spot:
 
 ---
 
-## What's New in Still Supported `2.0.0`
+## What's New in Still Supported `2.0.1`
 
 - **Works on ANY Jira Work Item**: No `still-supported-demo` label lock. Open any closed (`Done`) Jira issue assigned to you and start immediately, with 100% backward compatibility for existing stored cases.
 - **Atlassian Design System (`ADS`) Custom UI Cockpit (`viewportSize: large` + `jira:issueContext` glance)**:
@@ -54,7 +54,7 @@ Effective 22 November 2026. Developer: Yann Abadie, independent personal Codegei
 - **100% Runs on Atlassian (Zero External Egress)**: `permissions.external` is completely absent from `manifest.yml`. No external AI API, external database, CDN asset, telemetry, or analytics service is ever contacted.
 - **Minimal Scopes & Explicit User Control**:
   - `read:jira-work` & `read:graph:issue:jira`, `read:graph:page:confluence`, `read:graph:goal:atlassian`: user-scoped reads of the current Jira issue, linked Jira evidence issues, and Teamwork Graph context.
-  - `write:jira-work`: invoked **only** when an operator explicitly clicks *Seed 1-Click Live Linked Demo* or *Simulate upstream lab amendment* to create/amend a synthetic upstream lab issue. Existing customer/user Jira issue statuses are never silently modified.
+  - `write:jira-work`: GET-only Rovo/MCP actions perform **0 AI writes**; `write:jira-work` is restricted **exclusively** to synthetic `still-supported-upstream-lab` demo tickets when an operator explicitly clicks *Seed 1-Click Live Linked Demo* or *Simulate upstream lab amendment* (enforced by server-side label verification before any `PUT`). Real Jira issues and statuses are never modified.
   - `storage:app`: stores versioned cases, SHA-256 digests, dispositions, and the GDPR account-reference register in Forge Custom Entity Store (`case-state`), isolated per tenant installation.
   - `read:chat:rovo`: powers the read-only `Still Supported Inspector` Rovo Agent.
 - **Account Minimization & Self-Service GDPR Erasure**: Only opaque Atlassian account IDs are stored in structured attribution slots—never names, email addresses, or avatars. Automated trigger syncs use a non-personal marker (`[jira-trigger]`). Any user can redact their own account ID (`[erased]`) and the assigned custodian can permanently erase an entire case (`CASE_ERASED` tombstone) directly from Tab 4. Uninstallation follows [Atlassian's Forge hosted-storage lifecycle](https://developer.atlassian.com/platform/forge/storage-reference/hosted-storage-data-lifecycle/).

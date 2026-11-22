@@ -1,4 +1,4 @@
-# Atlassian Marketplace Submission Package — Still Supported `2.0.0`
+# Atlassian Marketplace Submission Package — Still Supported `2.0.1`
 
 Ready-to-paste fields for the Atlassian Marketplace Partner Portal submission (*Codegeist 2026 Bonus Track: Marketplace-Ready App*).
 
@@ -8,7 +8,7 @@ Ready-to-paste fields for the Atlassian Marketplace Partner Portal submission (*
 
 - **App Name**: `Still Supported`
 - **App ID (Forge ARI)**: `ari:cloud:ecosystem::app/a02e8917-1f2e-4737-a4d5-5a858b729799`
-- **Version**: `2.0.0`
+- **Version**: `2.0.1`
 - **Tagline (`76` chars <= 80)**:
   `Audit-grade decision support & redline drift tracking for closed Jira issues`
 - **Primary Product**: `Jira` (Jira Cloud, Rovo, Atlassian Teamwork Graph)
@@ -63,7 +63,7 @@ When a regulated engineering or quality issue closes (`Done`) in Jira, its appro
 | Scope | Minimum-Privilege Justification |
 | :--- | :--- |
 | `read:jira-work` | Verify user read access to the current Jira issue and read linked upstream Jira evidence issues. |
-| `write:jira-work` | Used **exclusively** on explicit user click of *Seed 1-Click Live Linked Demo* / *Simulate upstream lab amendment* to create/amend a test lab issue. Never modifies existing issue statuses silently. |
+| `write:jira-work` | GET-only Rovo/MCP actions (0 AI writes); `write:jira-work` is restricted **exclusively** to synthetic `still-supported-upstream-lab` demo tickets on explicit user click (enforced by server-side label verification). Never modifies non-synthetic Jira issues or statuses. |
 | `storage:app` | Persist versioned evidence records, dispositions, watcher indices, and GDPR account register in Forge KVS (`case-state`). |
 | `read:chat:rovo` | Required by Forge `rovo:agent` (`Still Supported Inspector`) for read-only conversational inspection. |
 | `read:graph:issue:jira` | Discover linked Jira work items via `api.asUser().requestTeamworkGraph`. |
