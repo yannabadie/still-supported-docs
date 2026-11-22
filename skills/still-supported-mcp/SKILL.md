@@ -22,7 +22,7 @@ All three MCP tools are **strictly read-only (`actionVerb: GET`, 0 AI writes)** 
 When Still Supported `2.0.1` is installed on your Jira Cloud site, both **`Still Supported Inspector`** (`rovo:agent`) and **`Still Supported MCP`** (`rovo:mcp`) are automatically registered in your Atlassian site's Rovo catalog.
 
 ### 2. Claude Code / Cursor (Streamable HTTP Forge MCP Endpoint)
-**Prerequisite**: Ensure your Atlassian Cloud site administrator has enabled Rovo MCP / Forge `rovo:mcp` tool exposure in **Atlassian Administration** (`Settings -> Rovo MCP server`). On first invocation, your MCP client completes standard Atlassian OAuth 2.1 user consent.
+**Prerequisite**: Install Still Supported on **Jira** (single site installation so Rovo and MCP read the Jira KVS partition) and enable external MCP exposure in **Atlassian Administration** (`Site settings -> Connected apps -> Still Supported -> Enable tools`). On first invocation, your MCP client completes standard Atlassian OAuth 2.1 PKCE consent (`resource: https://mcp.atlassian.com/forge/a02e8917-1f2e-4737-a4d5-5a858b729799`).
 
 #### Claude Code CLI (1-liner)
 ```bash
