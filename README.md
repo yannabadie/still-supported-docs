@@ -20,10 +20,10 @@ Teams face a dangerous blind spot:
 
 ---
 
-## What's New in Still Supported `2.0.1`
+## What's New in Still Supported 2.0.1 (Forge Production [3.0.0])
 
 - **Works on ANY Jira Work Item**: No `still-supported-demo` label lock. Open any closed (`Done`) Jira issue assigned to you and start immediately, with 100% backward compatibility for existing stored cases.
-- **Atlassian Design System (`ADS`) Custom UI Cockpit (`viewportSize: large` + `jira:issueContext` glance)**:
+- **Atlassian Design System (`ADS`) Light Custom UI Cockpit (`viewportSize: large` + `jira:issueContext` glance)**:
   - **Top Epistemic Status Bar**: Live Jira status, `DECISIONS TO REVIEW` vs `ALL DECISIONS SUPPORTED`, `CUSTOMER CITES @1`, active stock holds (`HOLD H20`), case revision `#n`, and 1-click Rovo Inspector launch.
   - **Tab 1 — Interactive 3-Column Vector SVG Support Graph**: Maps `Evidence Records & Linked Jira Issues` → `Signed Supplier Decisions` → `Customer History, Holds & Audit Pack` with solid green edges when `@cited === @current` and animated dashed crimson edges when upstream evidence advances or `D6 → D8` prerequisites break.
   - **Tab 2 — Word-Level LCS Redline Diff & Teamwork Graph Sources**: Unified and side-by-side redline (`#FFD5D2` removals / `#BAF3DB` additions), deterministic **Quantitative Drift Detector** (`24 cartons → 12 cartons (-50%)`), SHA-256 version digests, and live **Jira + Atlassian Teamwork Graph (`requestTeamworkGraph`)** source binding.
@@ -39,6 +39,8 @@ Teams face a dangerous blind spot:
 ## Evaluation guide
 
 [Install Still Supported in Jira](https://developer.atlassian.com/console/install/a02e8917-1f2e-4737-a4d5-5a858b729799?signature=AYABeALhwI1nlL2IRWKPvZfDO2EAAAADAAdhd3Mta21zAEthcm46YXdzOmttczp1cy13ZXN0LTI6NzA5NTg3ODM1MjQzOmtleS83MDVlZDY3MC1mNTdjLTQxYjUtOWY5Yi1lM2YyZGNjMTQ2ZTcAuAECAQB4CxqLTo9l4lqXuFjNim1xJM%2Bp%2F3TVP9xHS2BrU5DRRucBIXV1VYLU%2BVwT%2Fxgx0HgBzgAAAH4wfAYJKoZIhvcNAQcGoG8wbQIBADBoBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCBCcnGrjaBQsu84pQIBEIA70mCIO4Apy3z5CJEsbBdfx5bNzR25K0vTTtGafPUGsTfhGdZt740QBvZy8M5Iv6mPTsjuQgB2Zm2crKoAB2F3cy1rbXMAS2Fybjphd3M6a21zOmV1LXdlc3QtMTo3MDk1ODc4MzUyNDM6a2V5LzQ2MzBjZTZiLTAwYzMtNGRlMi04NzdiLTYyN2UyMDYwZTVjYwC4AQICAHi9bVMAkme4qVQX1fQHo6ePw3H40A7cGfz7yrmSfBWMXgHFfNY2OEaYAMf7BAziA1VhAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMm8Dvs7XO0%2FPpP55%2FAgEQgDuaW2r5Ty6I4sp3%2Fxkzd9Zz5VEEndaoQXxrbjun9TA7dYrpSwHQop9yCUINC5W9PKnq643jGN3IdGt9ygAHYXdzLWttcwBLYXJuOmF3czprbXM6dXMtZWFzdC0xOjcwOTU4NzgzNTI0MzprZXkvNmMxMjBiYTAtNGNkNS00OTg1LWI4MmUtNDBhMDQ5NTJjYzU3ALgBAgIAeDYASx0XCjkny4iLV6vz%2BKtEGSGT6kdt0QRpkn6D%2FlVEAd%2BFUlInKFZH2wW97XVDZ5YAAAB%2BMHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxyul518gRhyZD%2BWR4CARCAO0RVEvAjss98DkLzvfIWcYMXyOnHkOYFms4vJXx8hmrn3YdE9VPkih%2B0UAoJ%2BOWJXvXtdX35V%2BRaxdm%2FAgAAAAAMAAAQAAAAAAAAAAAAAAAAAJrcMXqWhXKVIObgop%2F8ldL%2F%2F%2F%2F%2FAAAAAQAAAAAAAAAAAAAAAQAAADKfHUuvoTSzds21CXR6mkN%2FJkGgV7TENsUqNW58kJWpDxvrRBzVcowvgOJydD7mtjRU6%2BjgNiNx2eNi0nCE%2B1V583k%3D&product=jira)
+
+*(Installs Forge Production deployment `[3.0.0]` — app release `v2.0.1` on **Jira**.)*
 
 Additional documentation in this repository:
 - [Rehearsal & Synthetic Counterexamples (`CQ-18`, `CQ-19`, `CQ-20`)](REHEARSAL.md)

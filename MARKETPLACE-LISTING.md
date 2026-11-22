@@ -8,7 +8,7 @@ Ready-to-paste fields for the Atlassian Marketplace Partner Portal submission (*
 
 - **App Name**: `Still Supported`
 - **App ID (Forge ARI)**: `ari:cloud:ecosystem::app/a02e8917-1f2e-4737-a4d5-5a858b729799`
-- **Version**: `2.0.1`
+- **Version**: `2.0.1` (Forge Production deployment `[3.0.0]`)
 - **Tagline (`76` chars <= 80)**:
   `Audit-grade decision support & redline drift tracking for closed Jira issues`
 - **Primary Product**: `Jira` (Jira Cloud, Rovo, Atlassian Teamwork Graph)
@@ -51,7 +51,7 @@ When a regulated engineering or quality issue closes (`Done`) in Jira, its appro
 - **Version-Bound Epistemic Graph**: Every decision cites immutable `RECORD@VERSION` snapshots with UTF-8 SHA-256 digests stored in Forge Custom Entity Store (`@forge/kvs`) using conditional compare-and-swap transactions.
 - **Zero Silent Status Rewrites**: Closed Jira issues remain `Done` while affected supplier decisions flip to `TO REVIEW`, customer acceptances show `CITES EARLIER VERSION`, and outdated handover drafts show `STALE`.
 - **Separation of Duties ("AI Inspects, Humans Sign")**: `Still Supported Inspector` (`rovo:agent`) and `Still Supported MCP` (`rovo:mcp`) expose strictly read-only `GET` tools. Only an explicitly assigned human reviewer can sign a new disposition (`Reaffirm`, `Withdraw support`, `Reopen closure review`) sealing `@current` citations.
-- **100% Runs on Atlassian**: Zero external egress (`permissions.external` absent), full light/dark Atlassian Design System (`ADS`) Custom UI, and native self-service GDPR erasure controls.
+- **100% Runs on Atlassian**: Zero external egress (`permissions.external` absent), Atlassian Design System (`ADS`) Light Custom UI, and native self-service GDPR erasure controls.
 
 ---
 
