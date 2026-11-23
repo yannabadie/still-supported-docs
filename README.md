@@ -1,10 +1,9 @@
 # Still Supported 2.0 — Epistemic Decision-Support & Redline Review in Jira
 
-**15-second judge walkthrough on ANY Jira issue:**
-1. Open **any** Jira issue assigned to you whose status is **Done** (no special Jira label required).
-2. Open **Still Supported** and click **Seed 1-Click Live Linked Demo (8D + Linked Lab Issue)** *(or **Initialize Local 8D Case** if you prefer zero extra tickets)*.
-3. Click **Simulate upstream lab amendment (24 → 12 cartons)** *(or edit the newly created `[LAB-SC20]` Jira issue yourself!)*.
-4. Watch the **3-column Epistemic Support Graph**, **Quantitative Drift Detector (`24 → 12 cartons, -50%`)**, **Word-Level LCS Redline Diff**, **Rovo Inspector**, and **SHA-256 Audit Evidence Pack** react in real time—without silently altering Jira status or forging human sign-offs.
+**90-second live judge walkthrough on ANY fresh Jira project (zero hardcoded path — no Confluence or Rovo required):**
+1. **Seed (`~20 s`)**: Assign any Jira issue to yourself, set its status to **Done**, open **Still Supported**, and click **Seed 1-Click Live Linked Demo (8D + Linked Lab Issue)** to create and link a real upstream Jira lab ticket (`[LAB-SC20]`, baseline `24 cartons`, `72 hours`, `releaseGate: CLEAR`).
+2. **Free-edit in Jira (`~35 s`)**: Click that newly linked `[LAB-SC20]` ticket in Jira's **Linked work items** right above the panel, **edit its Description with any numbers of your choice**—for example, change `all 24 cartons C01–C24` to **`15 cartons C01–C15`** (`-37.5%`) or **`only 8 cartons`** (`-66.7%`)—and save *(an optional 1-click **Simulate** shortcut is also available)*.
+3. **Inspect & Sign (`~30 s`)**: Return to your `Done` issue (click **Refresh** if the tab stayed open, or **Sync linked Jira evidence** for instant pull) to watch `avi:jira:updated:issue` append `SCAN-RUN@2` (`Actor: [jira-trigger]`), compute your exact custom `%` drift, render the **Word-Level LCS Redline Diff**, flip `D6` & `D8` to `TO REVIEW` (`releaseGate: BLOCKED` while Jira stays `Done`), sign human dispositions, and export the **SHA-256 Audit Evidence Pack**. Jump to the [3-Step Evaluation Guide](#evaluation-guide).
 
 ---
 
@@ -40,7 +39,22 @@ Teams face a dangerous blind spot:
 
 [Install Still Supported in Jira](https://developer.atlassian.com/console/install/a02e8917-1f2e-4737-a4d5-5a858b729799?signature=AYABeALhwI1nlL2IRWKPvZfDO2EAAAADAAdhd3Mta21zAEthcm46YXdzOmttczp1cy13ZXN0LTI6NzA5NTg3ODM1MjQzOmtleS83MDVlZDY3MC1mNTdjLTQxYjUtOWY5Yi1lM2YyZGNjMTQ2ZTcAuAECAQB4CxqLTo9l4lqXuFjNim1xJM%2Bp%2F3TVP9xHS2BrU5DRRucBIXV1VYLU%2BVwT%2Fxgx0HgBzgAAAH4wfAYJKoZIhvcNAQcGoG8wbQIBADBoBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDCBCcnGrjaBQsu84pQIBEIA70mCIO4Apy3z5CJEsbBdfx5bNzR25K0vTTtGafPUGsTfhGdZt740QBvZy8M5Iv6mPTsjuQgB2Zm2crKoAB2F3cy1rbXMAS2Fybjphd3M6a21zOmV1LXdlc3QtMTo3MDk1ODc4MzUyNDM6a2V5LzQ2MzBjZTZiLTAwYzMtNGRlMi04NzdiLTYyN2UyMDYwZTVjYwC4AQICAHi9bVMAkme4qVQX1fQHo6ePw3H40A7cGfz7yrmSfBWMXgHFfNY2OEaYAMf7BAziA1VhAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMm8Dvs7XO0%2FPpP55%2FAgEQgDuaW2r5Ty6I4sp3%2Fxkzd9Zz5VEEndaoQXxrbjun9TA7dYrpSwHQop9yCUINC5W9PKnq643jGN3IdGt9ygAHYXdzLWttcwBLYXJuOmF3czprbXM6dXMtZWFzdC0xOjcwOTU4NzgzNTI0MzprZXkvNmMxMjBiYTAtNGNkNS00OTg1LWI4MmUtNDBhMDQ5NTJjYzU3ALgBAgIAeDYASx0XCjkny4iLV6vz%2BKtEGSGT6kdt0QRpkn6D%2FlVEAd%2BFUlInKFZH2wW97XVDZ5YAAAB%2BMHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxyul518gRhyZD%2BWR4CARCAO0RVEvAjss98DkLzvfIWcYMXyOnHkOYFms4vJXx8hmrn3YdE9VPkih%2B0UAoJ%2BOWJXvXtdX35V%2BRaxdm%2FAgAAAAAMAAAQAAAAAAAAAAAAAAAAAJrcMXqWhXKVIObgop%2F8ldL%2F%2F%2F%2F%2FAAAAAQAAAAAAAAAAAAAAAQAAADKfHUuvoTSzds21CXR6mkN%2FJkGgV7TENsUqNW58kJWpDxvrRBzVcowvgOJydD7mtjRU6%2BjgNiNx2eNi0nCE%2B1V583k%3D&product=jira)
 
-*(Installs Forge Production deployment `[3.0.0]` — app release `v2.0.1` on **Jira**.)*
+*(Installs Forge Production deployment `[3.0.0]` — app release `v2.0.1` on **Jira**. Cold-install verified on fresh Jira-only sites with **no Confluence linked** and **no Rovo required**.)*
+
+### 3-Step Live Judge Evaluation (`< 90 seconds` — Free Jira Edit, Zero Hardcoded Path)
+
+1. **Step 1 (`~20 s`) — Seed a live linked case on any `Done` Jira issue**
+   - Open any Jira work item on your site. *(On a fresh `To Do` or unassigned ticket, Still Supported displays a 2-step checklist: assign the ticket to yourself, set its status to **Done**, and click **Refresh** in the panel header.)*
+   - Click **Seed 1-Click Live Linked Demo (8D + Linked Lab Issue)**. Still Supported creates and links a real upstream Jira issue `[LAB-SC20]` in the same project (`SCAN-RUN@1`: `24 cartons` `C01–C24`, `72 hours` at `-20 °C`; `ALL DECISIONS SUPPORTED`, `releaseGate: CLEAR`). *(Prefer zero extra tickets? Click **Initialize Local 8D Case**.)*
+2. **Step 2 (`~35 s`) — Open `[LAB-SC20]` in Jira and edit its Description yourself**
+   - Click the newly created `[LAB-SC20]` ticket in Jira's native **Linked work items** list right above the panel.
+   - Edit `[LAB-SC20]`'s **Description** with your own wording and numbers—for example, in paragraph 2 change `"completed on all 24 cartons C01–C24"` to **`"completed on 15 cartons C01–C15"`** (`-37.5%`), **`"completed on only 8 cartons"`** (`-66.7%`), or change `"72 hours"` to **`"48 hours"`** (`-33.3%`)—and click **Save** in Jira.
+   - *(Optional shortcut: if you prefer a 1-click preset instead of manual editing, click **Simulate upstream lab amendment (`24 → 12 cartons`)** in Tab 1.)*
+3. **Step 3 (`~30 s`) — Inspect live `avi:jira:updated:issue` drift, Redline Diff, Human Sign-Off & Audit Pack**
+   - Return to your `Done` case issue *(if that browser tab stayed open, wait ~1–3 s for the background `avi:jira:updated:issue` event and click **Refresh** in the Still Supported top bar, or click **Sync linked Jira evidence** in Tab 1 for instant pull)*:
+     - **Tab 1 (`Support Graph`)**: `SCAN-RUN@2` (`Actor: [jira-trigger]`) computes your exact custom `%` drift, flags `D6-effectiveness` & `D8` `TO REVIEW` (`releaseGate: BLOCKED`), and preserves `CUSTOMER CITES @1` while Jira status remains **Done**.
+     - **Tab 2 (`Evidence & Redline Diff`)**: Inspect the word-level LCS redline of your exact edit, SHA-256 digests, and live Jira / Teamwork Graph links *(or bind any custom Jira ticket via **Bind & Sync into `SCAN-RUN`** using units like `cartons`, `vials`, `units`, `samples`, `batches`, `lots`, `devices`, `pallets`, `items`, `cycles`, `hours`, `days`, `ppm`, `mg`, `ml`, `kg`, `°C`, or serial spans like `N01–N60`)*.
+     - **Tab 3 (`Examine & Sign`) & Tab 4 (`Audit Pack & Privacy`)**: Click **Assume Supplier Reviewer Role**, sign explicit human dispositions (`Withdraw support` / `Reopen closure review`), and export the canonical **SHA-256 Audit Evidence Pack** (`.json`, `.md`, `.html`) or test GDPR erasure (`[erased]` / `CASE_ERASED`).
 
 Additional documentation in this repository:
 - [Rehearsal & Synthetic Counterexamples (`CQ-18`, `CQ-19`, `CQ-20`)](REHEARSAL.md)
